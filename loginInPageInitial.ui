@@ -133,7 +133,7 @@ padding-bottom:0px;	</string>
      <string>Password</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btnLogin">
     <property name="geometry">
      <rect>
       <x>370</x>

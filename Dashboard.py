@@ -10,7 +10,9 @@ import csv
 from algorithms import *
 from Capital_Algos import *
 
-df = pd.read_csv('medicineData.csv')
+dfMedicine = pd.read_csv('medicineData.csv')
+dfCustomers = pd.read_csv('customerData.csv')
+dfOrders = pd.read_csv('ordersData.csv')
 
 def validate(name, password):
     if name == "admin" and password == "1234":
@@ -18,10 +20,11 @@ def validate(name, password):
     else:
         return False
 
-class Mainwindow(QMainWindow):
-    def __init__(self):
-        super(Mainwindow, self).__init__()
-        loadUi("ui/ui/SignIn.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
+class MainwindowDashboard(QMainWindow):
+    def __init__(self, login_screen):
+        self.log = login_screen
+        super(MainwindowDashboard, self).__init__()
+        loadUi("ui/ui/21.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
         
         # Command to remove the default Windows Frame Design.
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
@@ -33,10 +36,16 @@ class Mainwindow(QMainWindow):
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
         self.btnClose.clicked.connect(lambda: self.close())                       #add cross(close) button
-        self.btnExit.clicked.connect(lambda: self.close())                       #add cross(close) button
-        self.btnHome.clicked.connect(partial(self.tableViewLoad, df))
+        self.btnExit.clicked.connect(self.displayLogin)                       #add cross(close) button
+        self.btnHome.clicked.connect(partial(self.tableViewLoad, dfMedicine))
+        self.btnCustomers.clicked.connect(partial(self.tableViewLoad, dfCustomers))
+        self.btnAOrders.clicked.connect(partial(self.tableViewLoad, dfOrders))
         
         # self.btnLogin.clicked.connect(self.login)
+
+    def displayLogin(self):
+        self.close()
+        self.log.show()
 
     def loadData(self, filename):
         try:
@@ -75,6 +84,13 @@ class Mainwindow(QMainWindow):
                 for col in range(data.shape[1]):
                     item = QStandardItem(str(data.iat[row, col]))
                     self.model.setItem(row, col, item)
+
+            # Set color for horizontal header
+            self.tableView.horizontalHeader().setStyleSheet("QHeaderView::section { background-color: lightblue; }")
+
+            # Set color for vertical header
+            self.tableView.verticalHeader().setStyleSheet("QHeaderView::section { background-color: lightblue; }")
+        
         except Exception as e:
             print(f"Error loading data: {str(e)}")
 
@@ -88,7 +104,7 @@ def main():
         import sys
         app = QtWidgets.QApplication(sys.argv)
         # MainWindow = QtWidgets.QMainWindow()
-        window = Mainwindow()
+        window = MainwindowDashboard()
         window.show()
         sys.exit(app.exec_())
 

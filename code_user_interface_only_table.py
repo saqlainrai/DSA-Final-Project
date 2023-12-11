@@ -3,16 +3,12 @@ import csv
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 
-
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("CSV Data Viewer")
         self.setGeometry(100, 100, 600, 400)
-
-
-
 
         self.centralWidget = QtWidgets.QWidget(self)
         self.setCentralWidget(self.centralWidget)
@@ -21,11 +17,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.widgetContainer = QtWidgets.QWidget(self.centralWidget)
         self.layout.addWidget(self.widgetContainer)
         self.rightLayout = QtWidgets.QVBoxLayout(self.widgetContainer)
-
-
-
-
-
 
         self.tableWidget = QtWidgets.QTableWidget()
         self.tableWidget.setRowCount(8)  # Set row count
@@ -37,11 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # Load data from CSV
         self.load_data_from_csv()
 
-
-
         # Set size policy to minimize the table
         self.tableWidget.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-
 
     def get_data_from_table(self):
         rows = self.tableWidget.rowCount()
@@ -78,10 +66,6 @@ class MainWindow(QtWidgets.QMainWindow):
             for col, cell_data in enumerate(row_data):
                 item = QtWidgets.QTableWidgetItem(cell_data)
                 self.tableWidget.setItem(row, col, item)
-
-
-
-
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

@@ -1,0 +1,21 @@
+Name,Password,Location,Product,Quantity,Price,Total Bill,Due Data
+John Doe,pass123,New York,ProductA,2,10.99,21.98,15/01/2023
+Jane Smith,pass456,Los Angeles,ProductB,1,5.99,5.99,20/01/2023
+Alice Johnson,pass789,Chicago,ProductC,3,8.49,25.47,18/01/2023
+Bob Brown,pass987,San Francisco,ProductD,4,12.49,49.96,22/01/2023
+Charlie Davis,pass654,Seattle,ProductE,2,7.99,15.98,25/01/2023
+David Wilson,pass321,Miami,ProductF,5,6.79,33.95,17/01/2023
+Emma Thompson,pass567,Dallas,ProductG,3,9.99,29.97,23/01/2023
+Frank Johnson,pass876,Houston,ProductH,1,14.99,14.99,19/01/2023
+Grace Turner,pass345,Atlanta,ProductI,2,11.49,22.98,21/01/2023
+Henry Parker,pass012,Denver,ProductJ,4,18.99,75.96,26/01/2023
+Ivy White,pass890,Phoenix,ProductK,3,6.29,18.87,16/01/2023
+Jack Brown,pass567,San Diego,ProductL,2,8.79,17.58,24/01/2023
+Katie Davis,pass234,Portland,ProductM,1,13.49,13.49,27/01/2023
+Leo Miller,pass789,Las Vegas,ProductN,3,9.99,29.97,18/01/2023
+Mia Johnson,pass456,Minneapolis,ProductO,2,14.99,29.98,28/01/2023
+Noah Davis,pass123,Charlotte,ProductP,4,11.49,45.96,29/01/2023
+Olivia Wilson,pass567,Detroit,ProductQ,1,7.99,7.99,30/01/2023
+Parker Thompson,pass234,Philadelphia,ProductR,2,12.99,25.98,31/01/2023
+Quinn Smith,pass890,San Antonio,ProductS,3,8.49,25.47,01/02/2023
+Riley Turner,pass567,Indianapolis,ProductT,1,6.79,6.79,02/02/2023
