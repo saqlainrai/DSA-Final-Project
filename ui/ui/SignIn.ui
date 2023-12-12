@@ -275,7 +275,7 @@ QPushButton:pressed {
       <string>SIGN UP</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="comments">
      <property name="geometry">
       <rect>
        <x>440</x>
@@ -287,6 +287,7 @@ QPushButton:pressed {
      <property name="font">
       <font>
        <family>Courier New</family>
+       <pointsize>10</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>

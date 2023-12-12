@@ -302,9 +302,11 @@ padding-bottom:0px;	</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: #cdb4db;
+      <string notr="true">background-color:rgba(0,0,0,0);
 border: 2px solid #555555;
-color:rgba(0,0,0,240);</string>
+border-bottom:2px solid rgba(46,82,101,200);
+color:r#555555;
+padding-bottom:0px;	</string>
      </property>
      <property name="editable">
       <bool>false</bool>
@@ -438,9 +440,9 @@ padding-bottom:0px;	</string>
     <widget class="QLabel" name="comments">
      <property name="geometry">
       <rect>
-       <x>560</x>
+       <x>150</x>
        <y>390</y>
-       <width>311</width>
+       <width>721</width>
        <height>31</height>
       </rect>
      </property>

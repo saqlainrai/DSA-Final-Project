@@ -45,26 +45,6 @@ class MainwindowDashboard(QMainWindow):
         self.close()
         self.log.show()
 
-    def loadData(self, filename):
-        try:
-            with open(filename, 'r') as file:
-                reader = csv.reader(file)
-                self.model.clear()
-
-                # Set horizontal header labels
-                header = next(reader)
-                self.model.setHorizontalHeaderLabels(header)
-
-                # Populate the model with data
-                for row_data in reader:
-                    row = [QStandardItem(cell) for cell in row_data]
-                    self.model.appendRow(row)
-
-                # Set the model for the table view
-                self.tableView.setModel(self.model)
-        except FileNotFoundError:
-            print(f"File not found: {filename}")
-
     def tableViewLoad(self, data):
         self.model = QStandardItemModel()
         self.tableView.setModel(self.model)
@@ -92,12 +72,6 @@ class MainwindowDashboard(QMainWindow):
         except Exception as e:
             print(f"Error loading data: {str(e)}")
 
-    # def login(self):
-    #     self.close()
-    #     self.window = QtWidgets.QMainWindow()
-    #     # self.ui = Ui_MainWindow()
-    #     loadUi("untitled1.ui",self.ui)
-
 class MainwindowSignUp(QMainWindow):
     def __init__(self, login_screen):
         self.log = login_screen
@@ -115,8 +89,17 @@ class MainwindowSignUp(QMainWindow):
         
         self.btnBack.clicked.connect(self.displayLogin)    
         self.btnSignUp.clicked.connect(self.signUp)      
-
+        self.txtUsername.textChanged.connect(lambda: self.resetStyling(self.txtUsername))
+        self.txtPassword.textChanged.connect(lambda: self.resetStyling(self.txtPassword))
+        self.txtEmail.textChanged.connect(lambda: self.resetStyling(self.txtEmail))
+        self.txtContact.textChanged.connect(lambda: self.resetStyling(self.txtContact))
+        self.comboLocation.currentIndexChanged.connect(lambda: self.resetCombo(self.comboLocation)) 
         # self.btnLogin.clicked.connect(self.login)
+    
+    def resetCombo(self, obj):
+        obj.setStyleSheet("background-color: #cdb4db;\nborder: 2px solid #555555;\ncolor:rgba(0,0,0,240);")
+    def resetStyling(self, obj):
+        obj.setStyleSheet("border: 2px solid #555555;\nbackground-color:rgba(0,0,0,0);\nborder-bottom:2px solid rgba(46,82,101,200);\ncolor:rgba(0,0,0,240);\npadding-bottom:0px;	")
 
     def displayLogin(self):
         self.close()
@@ -129,6 +112,7 @@ class MainwindowSignUp(QMainWindow):
         return False
 
     def signUp(self):
+        global df                           # to show it is global
         name = self.txtName.text()
         Fname = self.txtFName.text()
         username = self.txtUsername.text()
@@ -138,24 +122,51 @@ class MainwindowSignUp(QMainWindow):
         contact = self.txtContact.text()
         location = self.comboLocation.currentText()
         
+        confirmation = self.confirmData(username, password, email, contact, location)
         flag = self.findExistingUser(username, email, contact)
-        if not flag:                                       # user not exists
-            self.txtName.clear()
-            self.txtFName.clear()
-            self.txtUsername.clear()
-            self.txtPassword.clear()
-            self.txtCNIC.clear()
-            self.txtEmail.clear()
-            self.txtContact.clear()
-            self.comboLocation.setCurrentIndex(0)
-            new_row = {'Name': name, 'Father Name': Fname, 'Username': username, 'Password': password, 'CNIC': cnic, 'Email': email, 'Contact No.': contact, 'Location': location}
-            df = df._append(new_row, ignore_index=True)
-            
-            df.to_csv('cu.csv', index=False)
+        if confirmation:                                       # user not exists
+            if not flag:
+                self.txtName.clear()
+                self.txtFName.clear()
+                self.txtUsername.clear()
+                self.txtPassword.clear()
+                self.txtCNIC.clear()
+                self.txtEmail.clear()
+                self.txtContact.clear()
+                self.comboLocation.setCurrentIndex(0)
+                new_row = {'Name': name, 'Father Name': Fname, 'Username': username, 'Password': password, 'CNIC': cnic, 'Email': email, 'Contact No.': contact, 'Location': location}
+                df = df._append(new_row, ignore_index=True)
+                
+                df.to_csv('customerData.csv', index=False)
 
-            self.displayLogin()
+                self.comments.setText("User Registered Successfully!!!")
+            else:
+                self.comments.setText("User already exists. Try Again!!!")
+
+    def confirmData(self, username, password, email, contact, location):
+        # if username == "" or password == "" or email == "" or contact == "":
+        if username != "":
+            if password != "":
+                if email.endswith("@gmail.com"):
+                    if contact != "":
+                        if location != "---Select Location---*":
+                            return True
+                        else:
+                            self.comments.setText("Add valid Location!!!")
+                            self.comboLocation.setStyleSheet("border: 2px solid red;")
+                    else:
+                        self.comments.setText("Add valid Contact No.!!!")
+                        self.txtContact.setStyleSheet("border: 2px solid red;")
+                else:
+                    self.comments.setText("Add valid Email!!!")
+                    self.txtEmail.setStyleSheet("border: 2px solid red;")
+            else:
+                self.comments.setText("Add valid Password!!!")
+                self.txtPassword.setStyleSheet("border: 2px solid red;")
         else:
-            print("User already exists. Try Again!!!")
+            self.comments.setText("Add valid Username!!!")
+            self.txtUsername.setStyleSheet("border: 2px solid red;")
+        return False
 
 # def main():
 #         import sys
