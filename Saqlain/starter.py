@@ -9,7 +9,8 @@ import csv
 
 # from algorithms import *
 # from Capital_Algos import *
-from Dashboard import MainwindowDashboard
+from FormsClasses import *
+# from SignUp import *
 
 df = pd.read_csv('medicineData.csv')
 
@@ -28,9 +29,16 @@ class Mainwindow(QMainWindow):
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
         self.btnExit.clicked.connect(lambda: self.close())                       #add cross(close) button
-        self.btnLogin.clicked.connect(self.loginScreen)
+        self.btnSignIn.clicked.connect(self.loginScreen)
+        self.btnSignUp.clicked.connect(self.signUpScreen)
         
         # self.btnLogin.clicked.connect(self.login)
+
+    def signUpScreen(self):
+        self.hide()                     # Close the current window
+        # Create and show a new window
+        self.new_window = MainwindowSignUp(self)
+        self.new_window.show()
 
     def loginScreen(self):
         username = self.txtUsername.text()
@@ -39,7 +47,7 @@ class Mainwindow(QMainWindow):
         self.txtPassword.clear()
         flag = validate(username, password)
         # if flag:
-        self.close()                     # Close the current window
+        self.hide()                     # Hide the current window
         # Create and show a new window
         new_window = MainwindowDashboard(self)
         new_window.show()
