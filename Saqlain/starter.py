@@ -7,11 +7,11 @@ from functools import partial
 import pandas as pd
 import csv
 
-# from algorithms import *
-# from Capital_Algos import *
-from Dashboard import MainwindowDashboard
+from FormsClasses import *
 
-df = pd.read_csv('medicineData.csv')
+df = pd.read_csv('customerData.csv')
+names = df["Username"].tolist()
+passes = df["Password"].tolist()
 
 class Mainwindow(QMainWindow):
     def __init__(self):
@@ -28,29 +28,37 @@ class Mainwindow(QMainWindow):
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
         self.btnExit.clicked.connect(lambda: self.close())                       #add cross(close) button
-        self.btnLogin.clicked.connect(self.loginScreen)
+        self.btnSignIn.clicked.connect(self.loginScreen)
+        self.btnSignUp.clicked.connect(self.signUpScreen)
         
         # self.btnLogin.clicked.connect(self.login)
+
+    def signUpScreen(self):
+        self.hide()                     # Close the current window
+        # Create and show a new window
+        self.new_window = MainwindowSignUp(self)
+        self.new_window.show()
 
     def loginScreen(self):
         username = self.txtUsername.text()
         password = self.txtPassword.text()
         self.txtUsername.clear()
         self.txtPassword.clear()
-        flag = validate(username, password)
-        # if flag:
-        self.close()                     # Close the current window
-        # Create and show a new window
-        new_window = MainwindowDashboard(self)
-        new_window.show()
-        # else:
-            # pass                      # implement it
-
-def validate(name, password):
-    if name == "Saqlain" and password == "1234":
-        return True
-    else:
-        return False
+        flag = self.validate(username, password)
+        if flag:
+            self.hide()                     # Hide the current window
+            # Create and show a new window
+            new_window = MainwindowDashboard(self)
+            new_window.show()
+        else:
+            self.comments.setText("User Not Found!!!")
+    
+    def validate(self, name, password):
+        for i in range(len(names)):
+            if name == names[i] and password == passes[i]:
+                return True
+        else:
+            return False
 
 def main():
     import sys

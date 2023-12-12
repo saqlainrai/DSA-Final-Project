@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
-    <height>571</height>
+    <width>801</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>731</width>
-      <height>571</height>
+      <width>801</width>
+      <height>611</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -31,10 +31,10 @@ border: 2px solid black;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>360</x>
+       <x>380</x>
        <y>20</y>
-       <width>331</width>
-       <height>521</height>
+       <width>381</width>
+       <height>551</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -53,9 +53,9 @@ background-color: #cdb4db;
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>460</x>
-       <y>150</y>
-       <width>151</width>
+       <x>510</x>
+       <y>140</y>
+       <width>131</width>
        <height>41</height>
       </rect>
      </property>
@@ -72,15 +72,15 @@ background-color: #cdb4db;
       <string notr="true">background-color: #cdb4db;</string>
      </property>
      <property name="text">
-      <string>Login In</string>
+      <string>Sign In</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="txtUsername">
      <property name="geometry">
       <rect>
-       <x>409</x>
-       <y>230</y>
-       <width>261</width>
+       <x>439</x>
+       <y>220</y>
+       <width>271</width>
        <height>41</height>
       </rect>
      </property>
@@ -109,9 +109,9 @@ padding-bottom:0px;	</string>
     <widget class="QLineEdit" name="txtPassword">
      <property name="geometry">
       <rect>
-       <x>409</x>
-       <y>300</y>
-       <width>261</width>
+       <x>439</x>
+       <y>290</y>
+       <width>271</width>
        <height>41</height>
       </rect>
      </property>
@@ -137,12 +137,12 @@ padding-bottom:0px;	</string>
       <string>Password</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnLogin">
+    <widget class="QPushButton" name="btnSignIn">
      <property name="geometry">
       <rect>
-       <x>510</x>
-       <y>370</y>
-       <width>161</width>
+       <x>440</x>
+       <y>440</y>
+       <width>261</width>
        <height>41</height>
       </rect>
      </property>
@@ -157,23 +157,24 @@ padding-bottom:0px;	</string>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton {
-	background-color: #a2d2ff;
+    background-color: #6ec66e;
     border-radius: 15px;
     color: black;
     padding: 8px 16px;
 }
 
 QPushButton:hover {
-	background-color: #bde0fe;
+    background-color: #5cb35c;
     text-decoration: underline;
 }
 
 QPushButton:pressed {
-	background-color: #a2d2ff;
-}</string>
+    background-color: #6ec66e;
+}
+</string>
      </property>
      <property name="text">
-      <string>LOGIN</string>
+      <string>SIGN IN</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -181,8 +182,8 @@ QPushButton:pressed {
       <rect>
        <x>30</x>
        <y>20</y>
-       <width>341</width>
-       <height>521</height>
+       <width>371</width>
+       <height>551</height>
       </rect>
      </property>
      <property name="text">
@@ -198,10 +199,10 @@ QPushButton:pressed {
     <widget class="QPushButton" name="btnExit">
      <property name="geometry">
       <rect>
-       <x>410</x>
-       <y>370</y>
+       <x>440</x>
+       <y>400</y>
        <width>91</width>
-       <height>41</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -233,6 +234,73 @@ QPushButton:pressed {
      </property>
      <property name="text">
       <string>EXIT</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSignUp">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>400</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Century Gothic</family>
+       <pointsize>8</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+       <underline>false</underline>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: #a2d2ff;
+    border-radius: 15px;
+    color: black;
+    padding: 8px 16px;
+}
+
+QPushButton:hover {
+	background-color: #bde0fe;
+    text-decoration: underline;
+}
+
+QPushButton:pressed {
+	background-color: #a2d2ff;
+}</string>
+     </property>
+     <property name="text">
+      <string>SIGN UP</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="comments">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>350</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 255, 255, 0);
+border: 0px;</string>
+     </property>
+     <property name="text">
+      <string>Welcome Back!!!</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </widget>
