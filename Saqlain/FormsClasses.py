@@ -7,12 +7,16 @@ from functools import partial
 import pandas as pd
 import csv
 
+from Algos.linearSearch import linearSearch
+
 # from algorithms import *
 # from Capital_Algos import *
 
+medicinePath = "medicineData.csv"
 df = pd.read_csv('customerData.csv')
-dfMedicine = pd.read_csv('medicineData.csv')
+dfMedicine = pd.read_csv(medicinePath)
 dfOrders = pd.read_csv('ordersData.csv')
+dfPrevious = pd.read_csv('previousOrders.csv')
 
 usernames = df['Username'].tolist()
 emails = df['Email'].tolist()
@@ -286,13 +290,14 @@ class MainwindowDetails(QMainWindow):
         return False
 
 class MainWindowUser(QMainWindow):
-    def __init__(self, login_screen, index):
-        self.userIndex = index
-        self.log = login_screen
+    def __init__(self, user):
+        self.userIndex = user.index
+        self.log = user.loginScreen
         super(MainWindowUser, self).__init__()
         loadUi("../ui/ui/User.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
         # self.tableView.hideTableView()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
+        self.setProperties()                            # set the values and stylesheets of content
         msg = f"Welcome, {usernames[self.userIndex]}"
         self.greet.setText(msg)
         self.greetFrame.move(30, 70)
@@ -315,32 +320,37 @@ class MainWindowUser(QMainWindow):
         self.btnSetting.clicked.connect(self.settingPressed)
         
         # self.btnLogin.clicked.connect(self.login)
+    def setProperties(self):
+        self.tableFrame.setStyleSheet("")
 
     def homePressed(self):
         self.greetFrame.show()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
     
     def stockPressed(self):
         self.greetFrame.hide()
         self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
-        self.addToComboBox(self.comboColumns, self.getCsvHeader("medicineData.csv"))
+        self.tableFrame.setVisible(True)
+        self.addToComboBox(self.comboColumns, self.getCsvHeader(medicinePath))
+        self.addToComboBox(self.comboColumns2, self.getCsvHeader(medicinePath))
         self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
 
     def AOrdersPressed(self):
         self.greetFrame.hide()
-        self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
+
+        self.tableViewLoad(dfOrders)
+        self.tableFrame.setVisible(True)
     
     def POrdersPressed(self):
         self.greetFrame.hide()
         self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
+        self.tableFrame.setVisible(True)
     
     def settingPressed(self):
         self.greetFrame.hide()
         self.displayDetails()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
     
     def displayDetails(self):
         self.hide()                     # Hide the current window
