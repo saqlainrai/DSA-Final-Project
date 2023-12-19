@@ -26,7 +26,7 @@ def counting_sort(arr, column_index,asscending):
 
         for i in range(n):
             arr[i] = output[n-i-1]
-    if  asscending:
+    else
 
         for i in range(n):
             arr[i] = output[i]
