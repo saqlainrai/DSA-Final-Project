@@ -1,4 +1,4 @@
-def counting_sort(arr, column_index):
+def counting_sort(arr, column_index,asscending):
     n = len(arr)
     max_value = float(-1000000000000)
     for i in range(n):
@@ -22,7 +22,13 @@ def counting_sort(arr, column_index):
 
         output[count[element] - 1] = arr[i]
         count[element] -= 1
+    if not asscending:
+        output.reverse()
     for i in range(n):
         arr[i] = output[i]
 
-
+a=[[1,0],[2,0],[3,0]]
+counting_sort(a,0,False)
+print(a)
+counting_sort(a,0,True)
+print(a)
