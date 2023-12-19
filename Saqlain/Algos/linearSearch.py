@@ -10,7 +10,7 @@ def linearSearch(data, searchElement,index):
     for i in range(0, len(data)):
         # -------we use .lower function that convert string into small caps by doing this 
         # -------we over come the  case sencetive 
-        if searchElement.lower() in data[i][index].lower():
+        if searchElement.lower() == data[i][index].lower():
             see.append(data[i])
 
     #see = pd.DataFrame(see,columns=["Product Name","Price","Condition","Shipping Price","Shipping City","Seller name","Feedback","Rating"])

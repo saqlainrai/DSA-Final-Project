@@ -8,6 +8,11 @@ import pandas as pd
 import csv
 
 from Algos.linearSearch import linearSearch
+from Algos.BubleSort import bubble_sort
+from Algos.InsertionSort import insertion_sort
+from Algos.SelectionSort import SelectionSort
+from Algos.ShellSort import shellSort
+
 
 # from algorithms import *
 # from Capital_Algos import *
@@ -19,6 +24,7 @@ dfOrders = pd.read_csv('ordersData.csv')
 dfPrevious = pd.read_csv('previousOrders.csv')
 
 usernames = df['Username'].tolist()
+passes = df['Password'].tolist()
 emails = df['Email'].tolist()
 contacts = df['Contact No.'].tolist()
 
@@ -335,16 +341,72 @@ class MainWindowUser(QMainWindow):
         self.addToComboBox(self.comboColumns2, self.getCsvHeader(medicinePath))
         self.comboColumns.setCurrentIndex(0)
         self.comboColumns2.setCurrentIndex(0)
+        self.btnSort.clicked.connect(self.sortPressed)
+
+    def sortPressed(self):
+        criteria = None
+        algo = self.comboAlgos.currentText()
+        colIndex = self.comboColumns2.currentIndex()
+        print(algo, "--------------------------------------", colIndex)
+        if self.radioAsc.isChecked() or self.radioDes.isChecked():
+            criteria = self.radioAsc.isChecked()
+        if algo != "---Select an Algorithm---" and criteria != None:
+            if algo == "Bubble Sort":
+                bubble_sort(dfMedicine.values.tolist(), colIndex, criteria)
+            elif algo == "Insertion Sort":
+                insertion_sort(dfMedicine.values.tolist(), colIndex, criteria)
+            self.tableViewLoad(dfMedicine)
+        else:
+            self.labelComments.setText("Select the valid Queries!!!")
 
     def AOrdersPressed(self):
         self.greetFrame.hide()
-
-        self.tableViewLoad(dfOrders)
+        
+        data = dfOrders.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+        
+        self.tableViewLoad(temp)
         self.tableFrame.setVisible(True)
     
     def POrdersPressed(self):
         self.greetFrame.hide()
-        self.tableViewLoad(dfMedicine)
+        
+        data = dfPrevious.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+
+        self.tableViewLoad(temp)
         self.tableFrame.setVisible(True)
     
     def settingPressed(self):

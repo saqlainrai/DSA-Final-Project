@@ -2,11 +2,14 @@
 def bubble_sort(array, index,ascending):
     n = len(array)
     for i in range(n - 1):
+        print("--------------------------------------------------------i=",i)
         swapped = False
         for j in range(n - 1 - i,):
             try:
-                x=float(array[j][index]) 
-                y=float(array[j + 1][index])
+                # x=float(array[j][index]) 
+                # y=float(array[j + 1][index])
+                x=array[j][index]
+                y=array[j + 1][index]
             except:
                 x=array[j][index]
                 y=array[j + 1][index]
