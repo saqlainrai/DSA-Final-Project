@@ -7,14 +7,24 @@ from functools import partial
 import pandas as pd
 import csv
 
+from Algos.linearSearch import linearSearch
+from Algos.BubleSort import bubble_sort
+from Algos.InsertionSort import insertion_sort
+from Algos.SelectionSort import SelectionSort
+from Algos.ShellSort import shellSort
+
+
 # from algorithms import *
 # from Capital_Algos import *
 
+medicinePath = "medicineData.csv"
 df = pd.read_csv('customerData.csv')
-dfMedicine = pd.read_csv('medicineData.csv')
+dfMedicine = pd.read_csv(medicinePath)
 dfOrders = pd.read_csv('ordersData.csv')
+dfPrevious = pd.read_csv('previousOrders.csv')
 
 usernames = df['Username'].tolist()
+passes = df['Password'].tolist()
 emails = df['Email'].tolist()
 contacts = df['Contact No.'].tolist()
 
@@ -286,13 +296,14 @@ class MainwindowDetails(QMainWindow):
         return False
 
 class MainWindowUser(QMainWindow):
-    def __init__(self, login_screen, index):
-        self.userIndex = index
-        self.log = login_screen
+    def __init__(self, user):
+        self.userIndex = user.index
+        self.log = user.loginScreen
         super(MainWindowUser, self).__init__()
         loadUi("../ui/ui/User.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
         # self.tableView.hideTableView()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
+        self.setProperties()                            # set the values and stylesheets of content
         msg = f"Welcome, {usernames[self.userIndex]}"
         self.greet.setText(msg)
         self.greetFrame.move(30, 70)
@@ -315,32 +326,93 @@ class MainWindowUser(QMainWindow):
         self.btnSetting.clicked.connect(self.settingPressed)
         
         # self.btnLogin.clicked.connect(self.login)
+    def setProperties(self):
+        self.tableFrame.setStyleSheet("")
 
     def homePressed(self):
         self.greetFrame.show()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
     
     def stockPressed(self):
         self.greetFrame.hide()
         self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
-        self.addToComboBox(self.comboColumns, self.getCsvHeader("medicineData.csv"))
+        self.tableFrame.setVisible(True)
+        self.addToComboBox(self.comboColumns, self.getCsvHeader(medicinePath))
+        self.addToComboBox(self.comboColumns2, self.getCsvHeader(medicinePath))
         self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
+        self.btnSort.clicked.connect(self.sortPressed)
+
+    def sortPressed(self):
+        criteria = None
+        algo = self.comboAlgos.currentText()
+        colIndex = self.comboColumns2.currentIndex()
+        print(algo, "--------------------------------------", colIndex)
+        if self.radioAsc.isChecked() or self.radioDes.isChecked():
+            criteria = self.radioAsc.isChecked()
+        if algo != "---Select an Algorithm---" and criteria != None:
+            if algo == "Bubble Sort":
+                bubble_sort(dfMedicine.values.tolist(), colIndex, criteria)
+            elif algo == "Insertion Sort":
+                insertion_sort(dfMedicine.values.tolist(), colIndex, criteria)
+            self.tableViewLoad(dfMedicine)
+        else:
+            self.labelComments.setText("Select the valid Queries!!!")
 
     def AOrdersPressed(self):
         self.greetFrame.hide()
-        self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
+        
+        data = dfOrders.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+        
+        self.tableViewLoad(temp)
+        self.tableFrame.setVisible(True)
     
     def POrdersPressed(self):
         self.greetFrame.hide()
-        self.tableViewLoad(dfMedicine)
-        self.tableView.setVisible(True)
+        
+        data = dfPrevious.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+
+        self.tableViewLoad(temp)
+        self.tableFrame.setVisible(True)
     
     def settingPressed(self):
         self.greetFrame.hide()
         self.displayDetails()
-        self.tableView.setVisible(False)
+        self.tableFrame.setVisible(False)
     
     def displayDetails(self):
         self.hide()                     # Hide the current window

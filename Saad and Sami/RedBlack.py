@@ -1,12 +1,12 @@
 class Node():
-    def _int_(self, value):
+    def __init__(self, value):
         self.value= value
         self.left=None
         self.right=None
         self.parent=None
         self.color=1
 class RBT():
-    def __int__(self):
+    def __init__(self):
         self.nill = Node(0)
         self.nill.color = 0
         self.nill.left = None

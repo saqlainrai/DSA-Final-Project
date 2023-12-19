@@ -9,6 +9,13 @@ import csv
 
 from FormsClasses import *
 
+class UserDetails():
+    def __init__(self, name, password, index):
+        self.name = name
+        self.password = password
+        self.index = index
+        self.loginScreen = None
+
 class Mainwindow(QMainWindow):
     def __init__(self):
         self.userIndex = -1
@@ -25,10 +32,20 @@ class Mainwindow(QMainWindow):
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
         self.btnExit.clicked.connect(lambda: self.close())                       #add cross(close) button
-        self.btnSignIn.clicked.connect(self.loginScreen)
-        self.btnSignUp.clicked.connect(self.signUpScreen)
+        # self.btnSignIn.clicked.connect(self.loginScreen)
+        # self.btnSignUp.clicked.connect(self.signUpScreen)
+
+        self.btnSignIn.clicked.connect(self.tempScreen)
         
         # self.btnLogin.clicked.connect(self.login)
+
+    def tempScreen(self):
+        user = UserDetails('a', 'b', 4)
+        user.loginScreen = self
+        self.hide()                     # Hide the current window
+        # Create and show a new window
+        new_window = MainWindowUser(user)
+        new_window.show()
 
     def signUpScreen(self):
         self.hide()                     # Close the current window
@@ -44,15 +61,19 @@ class Mainwindow(QMainWindow):
         flag = self.validate(username, password)
         
         if username == "Saqlain" and password == "1234":
+            user = UserDetails(username, password, -1)
+            user.loginScreen = self
             self.hide()                     # Hide the current window
             # Create and show a new window
-            new_window = MainwindowDashboard(self)
+            new_window = MainwindowDashboard(user)
             new_window.show()
         else:
             if flag:
+                user = UserDetails(username, password, self.userIndex)
+                user.loginScreen = self
                 self.hide()                     # Hide the current window
                 # Create and show a new window
-                new_window = MainWindowUser(self, self.userIndex)
+                new_window = MainWindowUser(user)
                 new_window.show()
             else:
                 self.comments.setText("User Not Found!!!")
