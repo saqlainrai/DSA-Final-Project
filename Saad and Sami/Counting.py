@@ -23,9 +23,13 @@ def counting_sort(arr, column_index,asscending):
         output[count[element] - 1] = arr[i]
         count[element] -= 1
     if not asscending:
-        output.reverse()
-    for i in range(n):
-        arr[i] = output[i]
+
+        for i in range(n):
+            arr[i] = output[n-i-1]
+    if  asscending:
+
+        for i in range(n):
+            arr[i] = output[i]
 
 a=[[1,0],[2,0],[3,0]]
 counting_sort(a,0,False)
