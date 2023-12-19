@@ -7,6 +7,8 @@ from functools import partial
 import pandas as pd
 import csv
 
+from datetime import datetime
+
 from Algos.linearSearch import linearSearch
 from Algos.BubleSort import bubble_sort
 from Algos.InsertionSort import insertion_sort
@@ -17,7 +19,7 @@ from Algos.ShellSort import shellSort
 # from algorithms import *
 # from Capital_Algos import *
 
-medicinePath = "medicineData.csv"
+medicinePath = "data.csv"
 df = pd.read_csv('customerData.csv')
 dfMedicine = pd.read_csv(medicinePath)
 dfOrders = pd.read_csv('ordersData.csv')
@@ -27,6 +29,7 @@ usernames = df['Username'].tolist()
 passes = df['Password'].tolist()
 emails = df['Email'].tolist()
 contacts = df['Contact No.'].tolist()
+locations = df['Location'].tolist()
 
 class MainwindowDashboard(QMainWindow):
     def __init__(self, login_screen):
@@ -299,6 +302,7 @@ class MainWindowUser(QMainWindow):
     def __init__(self, user):
         self.userIndex = user.index
         self.log = user.loginScreen
+        self.currentDataFrame = None
         super(MainWindowUser, self).__init__()
         loadUi("../ui/ui/User.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
         # self.tableView.hideTableView()
@@ -324,8 +328,32 @@ class MainWindowUser(QMainWindow):
         self.btnAOrders.clicked.connect(self.AOrdersPressed)
         self.btnPOrders.clicked.connect(self.POrdersPressed)
         self.btnSetting.clicked.connect(self.settingPressed)
-        
+        self.btnOrder.clicked.connect(self.orderPressed)
         # self.btnLogin.clicked.connect(self.login)
+    
+    def orderPressed(self):
+        count = self.spinQuantity.value()
+        if self.tableView.currentIndex().row() != -1 and count > 0:
+            self.labelComments.setText("Enjoy the best version of Program")
+            index = self.tableView.selectedIndexes()[0].row()
+            array = self.currentDataFrame.values.tolist()
+
+            # Append the new data
+            price = array[index][1]
+            total = price * count
+            
+            current_datetime = datetime.now()
+            current_date = current_datetime.date()
+            original_date = datetime.strptime(current_date, "%Y-%m-%d")
+            current_date = original_date.strftime("%d/%m/%Y")
+            
+            new_data = {'Name':usernames[self.userIndex], 'Password':passes[self.userIndex],'Location':locations[self.userIndex],'Product':array[index][0],'Quantity': count,'Price':price,'Total Bill':total,'Due Data':current_date}
+            df2 = dfOrders._append(new_data, ignore_index=True)
+            df2.to_csv('ordersData.csv', index=False)
+            print("Data added to ordersData.csv")
+        else:
+            self.labelComments.setText("Select valid Arguments")
+
     def setProperties(self):
         self.tableFrame.setStyleSheet("")
 
@@ -336,6 +364,7 @@ class MainWindowUser(QMainWindow):
     def stockPressed(self):
         self.greetFrame.hide()
         self.tableViewLoad(dfMedicine)
+        self.currentDataFrame = dfMedicine
         self.tableFrame.setVisible(True)
         self.addToComboBox(self.comboColumns, self.getCsvHeader(medicinePath))
         self.addToComboBox(self.comboColumns2, self.getCsvHeader(medicinePath))
@@ -347,15 +376,35 @@ class MainWindowUser(QMainWindow):
         criteria = None
         algo = self.comboAlgos.currentText()
         colIndex = self.comboColumns2.currentIndex()
-        print(algo, "--------------------------------------", colIndex)
+        
         if self.radioAsc.isChecked() or self.radioDes.isChecked():
             criteria = self.radioAsc.isChecked()
+        array = dfMedicine.values.tolist()  
         if algo != "---Select an Algorithm---" and criteria != None:
             if algo == "Bubble Sort":
-                bubble_sort(dfMedicine.values.tolist(), colIndex, criteria)
+                bubble_sort(array, colIndex, criteria)
             elif algo == "Insertion Sort":
-                insertion_sort(dfMedicine.values.tolist(), colIndex, criteria)
-            self.tableViewLoad(dfMedicine)
+                insertion_sort(array, colIndex, criteria)
+            name, price, discount, manufacturer, type, size, cmp1, cmp2 = [], [], [], [], [], [], [], []
+            for i in array:
+                name.append(i[0])
+                price.append(i[1])
+                discount.append(i[2])
+                manufacturer.append(i[3])
+                type.append(i[4])
+                size.append(i[5])
+                cmp1.append(i[6])
+                cmp2.append(i[7])
+            data = {'Name': name,
+                'Price': price,
+                'Discount': discount,
+                'Manufacturer': manufacturer,
+                'Type': type,
+                'Composition1': cmp1,
+                'Composition2': cmp2}
+            temp = pd.DataFrame(data)
+            self.tableViewLoad(temp)
+            self.currentDataFrame = temp
         else:
             self.labelComments.setText("Select the valid Queries!!!")
 
@@ -380,7 +429,7 @@ class MainWindowUser(QMainWindow):
                 'Location': location,
                 'Date': date}
         temp = pd.DataFrame(data)
-        
+        self.currentDataFrame = temp
         self.tableViewLoad(temp)
         self.tableFrame.setVisible(True)
     
@@ -407,6 +456,7 @@ class MainWindowUser(QMainWindow):
         temp = pd.DataFrame(data)
 
         self.tableViewLoad(temp)
+        self.currentDataFrame = temp
         self.tableFrame.setVisible(True)
     
     def settingPressed(self):
