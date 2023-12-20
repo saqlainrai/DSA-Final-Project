@@ -2,7 +2,6 @@
 def bubble_sort(array, index,ascending):
     n = len(array)
     for i in range(n - 1):
-        print("--------------------------------------------------------i=",i)
         swapped = False
         for j in range(n - 1 - i,):
             try:
