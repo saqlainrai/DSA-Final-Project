@@ -8,6 +8,7 @@ import pandas as pd
 import csv
 
 from FormsClasses import *
+from AdminDashboard import *
 
 class UserDetails():
     def __init__(self, name, password, index):
@@ -44,8 +45,8 @@ class Mainwindow(QMainWindow):
         user.loginScreen = self
         self.hide()                     # Hide the current window
         # Create and show a new window
-        new_window = MainWindowUser(user)
-        new_window.show()
+        self.new_window = MainwindowDashboard(user)
+        self.new_window.show()
 
     def signUpScreen(self):
         self.hide()                     # Close the current window
@@ -83,7 +84,8 @@ class Mainwindow(QMainWindow):
         names = df["Username"].tolist()
         passes = df["Password"].tolist()
         for i in range(len(names)):
-            if name == names[i] and password == passes[i]:
+            temp = Decrypt(passes[i])
+            if name == names[i] and password == temp:
                 self.userIndex = i
                 return True
         else:

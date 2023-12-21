@@ -30,19 +30,6 @@ passes = df['Password'].tolist()
 emails = df['Email'].tolist()
 contacts = df['Contact No.'].tolist()
 locations = df['Location'].tolist()
-key = 11
-
-def Encrypt(message):
-    encrypted = ""
-    for i in message:
-        encrypted += chr(ord(i) + key)
-    return encrypted
-
-def Decrypt(message):
-    decrypted = ""
-    for i in message:
-        decrypted += chr(ord(i) - key)
-    return decrypted
 
 class MainwindowDashboard(QMainWindow):
     def __init__(self, login_screen):
@@ -160,7 +147,6 @@ class MainwindowSignUp(QMainWindow):
                 self.txtEmail.clear()
                 self.txtContact.clear()
                 self.comboLocation.setCurrentIndex(0)
-                password = Encrypt(password)
                 new_row = {'Name': name, 'Father Name': Fname, 'Username': username, 'Password': password, 'CNIC': cnic, 'Email': email, 'Contact No.': contact, 'Location': location}
                 df = df._append(new_row, ignore_index=True)
                 
@@ -313,9 +299,9 @@ class MainwindowDetails(QMainWindow):
         return False
 
 class MainWindowUser(QMainWindow):
-    def __init__(self, userObject):
-        self.user = userObject
-        self.previousScreen = userObject.loginScreen
+    def __init__(self, user):
+        self.userIndex = user.index
+        self.log = user.loginScreen
         self.currentDataFrame = None
         super(MainWindowUser, self).__init__()
         loadUi("../ui/ui/User.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
@@ -343,18 +329,6 @@ class MainWindowUser(QMainWindow):
         self.btnSearch.clicked.connect(self.searchPressed)
         # self.btnLogin.clicked.connect(self.login)
     
-    def AOrdersPressed(self):
-        # self.formB.close()
-        self.formB = WindowUserB(self.user, 1)
-        # self.formB.move(645, 315)
-        self.formB.show()
-    
-    def POrdersPressed(self):
-        # self.formB.close()
-        self.formB = WindowUserB(self.user, 2)
-        # self.formB.move(645, 315)
-        self.formB.show()
-
     def searchPressed(self):
         query = self.txtSearch.text()
         colIndex = self.comboColumns.currentIndex()
@@ -400,7 +374,7 @@ class MainWindowUser(QMainWindow):
             original_date = datetime.strptime(str(current_date), "%Y-%m-%d")
             current_date = original_date.strftime("%d/%m/%Y")
             
-            new_data = {'Name':usernames[self.user.index], 'Password':passes[self.user.index],'Location':locations[self.user.index],'Product':array[index][0],'Quantity': count,'Price':price,'Total Bill':total,'Due Data':current_date}
+            new_data = {'Name':usernames[self.userIndex], 'Password':passes[self.userIndex],'Location':locations[self.userIndex],'Product':array[index][0],'Quantity': count,'Price':price,'Total Bill':total,'Due Data':current_date}
             df2 = dfOrders._append(new_data, ignore_index=True)
             df2.to_csv('ordersData.csv', index=False)
             print("Data added to ordersData.csv")
@@ -408,13 +382,12 @@ class MainWindowUser(QMainWindow):
             self.labelComments.setText("Select valid Arguments")
 
     def setProperties(self):
-        msg = f"Welcome, {usernames[self.user.index]}"
+        msg = f"Welcome, {usernames[self.userIndex]}"
         self.greet.setText(msg)
         self.tableFrameBoth.setStyleSheet("")
         self.greetFrame.move(30, 70)
 
     def homePressed(self):
-        self.formB.close()
         self.greetFrame.show()
         self.tableFrameBoth.setVisible(False)
     
@@ -457,7 +430,6 @@ class MainWindowUser(QMainWindow):
                 'Discount': discount,
                 'Manufacturer': manufacturer,
                 'Type': type,
-                'Size': size,
                 'Composition1': cmp1,
                 'Composition2': cmp2}
             temp = pd.DataFrame(data)
@@ -466,16 +438,74 @@ class MainWindowUser(QMainWindow):
         else:
             self.labelComments.setText("Select the valid Queries!!!")
 
+    def AOrdersPressed(self):
+        self.greetFrame.hide()
+        data = dfOrders.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+        self.currentDataFrame = temp
+        self.tableViewLoad(temp)
+        # self.tableFrameSort.setVisible(True)
+        self.tableFrameBoth.setVisible(False)
+        
+        header = self.currentDataFrame.columns.tolist()
+        self.addToComboBox(self.comboColumns, header)
+        self.addToComboBox(self.comboColumns2, header)
+        self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
+    
+    def POrdersPressed(self):
+        self.greetFrame.hide()
+        
+        data = dfPrevious.values.tolist()
+        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
+        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+        product, quantity, price, total, location, date = [], [], [], [], [], []
+        for i in final:
+            product.append(i[3])
+            quantity.append(i[4])
+            price.append(i[5])
+            total.append(i[6])
+            location.append(i[2])
+            date.append(i[7])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total Bill': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+
+        self.tableViewLoad(temp)
+        self.currentDataFrame = temp
+        # self.tableFrameSort.setVisible(True)
+        self.tableFrameBoth.setVisible(False)
+
+        header = self.currentDataFrame.columns.tolist()
+        self.addToComboBox(self.comboColumns, header)
+        self.addToComboBox(self.comboColumns2, header)
+        self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
+    
     def settingPressed(self):
         self.greetFrame.hide()
         self.displayDetails()
         self.tableFrame.setVisible(False)
-    
-    def displayForm(self):
-        # self.hide()
-        self.new_window = WindowUserB(self)
-        self.new_window.move(645, 315)
-        self.new_window.show()
     
     def displayDetails(self):
         self.hide()                     # Hide the current window
@@ -523,207 +553,3 @@ class MainWindowUser(QMainWindow):
         
         except Exception as e:
             print(f"Error loading data: {str(e)}")
-
-class WindowUserB(QMainWindow):
-    def __init__(self, user, caller):
-        self.userIndex = 4
-        self.log = user.loginScreen
-        self.currentDataFrame = None
-        super(WindowUserB, self).__init__()
-        loadUi("../ui/ui/UserB.ui",self)         
-        
-        # Command to remove the default Windows Frame Design.
-        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-        
-        if caller == 1:
-            self.AOrdersPressed()
-        elif caller == 2:
-            self.POrdersPressed()
-
-        self.btnClose.clicked.connect(lambda: self.close())            
-        self.btnExit.clicked.connect(self.displayLogin)               
-        self.btnHome.clicked.connect(self.displayLogin)
-        self.btnStock.clicked.connect(self.displayLogin)
-        self.btnAOrders.clicked.connect(self.AOrdersPressed)
-        self.btnPOrders.clicked.connect(self.POrdersPressed)
-        self.btnSetting.clicked.connect(self.displayLogin)
-        self.btnSearch.clicked.connect(self.searchPressed)
-        self.btnSort.clicked.connect(self.sortPressed)
-
-    def searchPressed(self):
-        query = self.txtSearch.text()
-        colIndex = self.comboColumns.currentIndex()
-        if query == "":
-            self.labelComments.setText("Enter a valid query....")
-        else:
-            data = self.currentDataFrame.values.tolist()
-            sameUsers = linearSearch(data, query, colIndex)
-            product, quantity, price, total, location, date = [], [], [], [], [], []
-            for i in sameUsers:
-                product.append(i[0])
-                quantity.append(i[1])
-                price.append(i[2])
-                total.append(i[3])
-                location.append(i[4])
-                date.append(i[5])
-            data = {'Product': product,
-                    'Quantity': quantity,
-                    'Price': price,
-                    'Total': total,
-                    'Location': location,
-                    'Date': date}
-            temp = pd.DataFrame(data)
-            self.tableViewLoad(temp)
-            self.currentDataFrame = temp
-
-    def AOrdersPressed(self):
-        data = dfOrders.values.tolist()
-        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
-        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
-        product, quantity, price, total, location, date = [], [], [], [], [], []
-        for i in final:
-            product.append(i[3])
-            quantity.append(i[4])
-            price.append(i[5])
-            total.append(i[6])
-            location.append(i[2])
-            date.append(i[7])
-        data = {'Product': product,
-                'Quantity': quantity,
-                'Price': price,
-                'Total Bill': total,
-                'Location': location,
-                'Date': date}
-        temp = pd.DataFrame(data)
-        self.currentDataFrame = temp
-        self.tableViewLoad(temp)
-        
-        header = self.currentDataFrame.columns.tolist()
-        self.addToComboBox(self.comboColumns, header)
-        self.addToComboBox(self.comboColumns2, header)
-        self.comboColumns.setCurrentIndex(0)
-        self.comboColumns2.setCurrentIndex(0)
-    
-    def POrdersPressed(self):
-        data = dfPrevious.values.tolist()
-        sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
-        final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
-        product, quantity, price, total, location, date = [], [], [], [], [], []
-        for i in final:
-            product.append(i[3])
-            quantity.append(i[4])
-            price.append(i[5])
-            total.append(i[6])
-            location.append(i[2])
-            date.append(i[7])
-        data = {'Product': product,
-                'Quantity': quantity,
-                'Price': price,
-                'Total Bill': total,
-                'Location': location,
-                'Date': date}
-        temp = pd.DataFrame(data)
-
-        self.tableViewLoad(temp)
-        self.currentDataFrame = temp
-
-        header = self.currentDataFrame.columns.tolist()
-        self.addToComboBox(self.comboColumns, header)
-        self.addToComboBox(self.comboColumns2, header)
-        self.comboColumns.setCurrentIndex(0)
-        self.comboColumns2.setCurrentIndex(0)
-    
-    def tableViewLoad(self, data):
-        self.model = QStandardItemModel()
-        self.tableView.setModel(self.model)
-
-        try:
-            # data = pd.read_csv(path)
-            self.model.setRowCount(data.shape[0])
-            self.model.setColumnCount(data.shape[1])
-
-            for col, header in enumerate(data.columns):
-                header_item = QStandardItem(header)
-                self.model.setHorizontalHeaderItem(col, header_item)
-
-            for row in range(data.shape[0]):
-                for col in range(data.shape[1]):
-                    item = QStandardItem(str(data.iat[row, col]))
-                    self.model.setItem(row, col, item)
-
-            # Set color for horizontal header
-            self.tableView.horizontalHeader().setStyleSheet("QHeaderView::section { background-color: lightblue; }")
-
-            # Set color for vertical header
-            self.tableView.verticalHeader().setStyleSheet("QHeaderView::section { background-color: lightblue; }")
-        
-        except Exception as e:
-            print(f"Error loading data: {str(e)}")
-    
-    def addToComboBox(self, obj, data):
-        obj.clear()
-        for i in data:
-            obj.addItem(i)
-
-    def searchPressed(self):
-        query = self.txtSearch.text()
-        colIndex = self.comboColumns.currentIndex()
-        if query == "":
-            self.labelComments.setText("Enter a valid query....")
-        else:
-            data = self.currentDataFrame.values.tolist()
-            sameUsers = linearSearch(data, query, colIndex)
-            product, quantity, price, total, location, date = [], [], [], [], [], []
-            for i in sameUsers:
-                product.append(i[0])
-                quantity.append(i[1])
-                price.append(i[2])
-                total.append(i[3])
-                location.append(i[4])
-                date.append(i[5])
-            data = {'Product': product,
-                    'Quantity': quantity,
-                    'Price': price,
-                    'Total Bill': total,
-                    'Location': location,
-                    'Date': date}
-            temp = pd.DataFrame(data)
-            self.tableViewLoad(temp)
-            self.currentDataFrame = temp
-
-    def sortPressed(self):
-        criteria = None
-        algo = self.comboAlgos.currentText()
-        colIndex = self.comboColumns2.currentIndex()
-        
-        if self.radioAsc.isChecked() or self.radioDes.isChecked():
-            criteria = self.radioAsc.isChecked()
-        array = self.currentDataFrame.values.tolist()  
-        if algo != "---Select an Algorithm---" and criteria != None:
-            if algo == "Bubble Sort":
-                bubble_sort(array, colIndex, criteria)
-            elif algo == "Insertion Sort":
-                insertion_sort(array, colIndex, criteria)
-            product, quantity, price, total, location, date = [], [], [], [], [], []
-            for i in array:
-                product.append(i[0])
-                quantity.append(i[1])
-                price.append(i[2])
-                total.append(i[3])
-                location.append(i[4])
-                date.append(i[5])
-            data = {'Product': product,
-                    'Quantity': quantity,
-                    'Price': price,
-                    'Total Bill': total,
-                    'Location': location,
-                    'Date': date}
-            temp = pd.DataFrame(data)
-            self.tableViewLoad(temp)
-            self.currentDataFrame = temp
-        else:
-            self.labelComments.setText("Select the valid Queries!!!")
-
-    def displayLogin(self):
-        self.close()
-        self.log.show()

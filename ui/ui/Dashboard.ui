@@ -226,11 +226,11 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnLocation">
+     <widget class="QPushButton" name="btnMap">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>320</y>
+        <y>370</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -247,7 +247,7 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
        <string notr="true">background-color: rgb(69, 123, 157);</string>
       </property>
       <property name="text">
-       <string>Location</string>
+       <string>Map</string>
       </property>
       <property name="icon">
        <iconset>
@@ -264,7 +264,7 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>270</y>
+        <y>320</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -298,7 +298,7 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>170</y>
+        <y>220</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -332,7 +332,7 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>220</y>
+        <y>270</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -422,6 +422,40 @@ border-radius: 15px;</string>
       </property>
       <property name="autoExclusive">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnMedicines">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>170</y>
+        <width>171</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>8</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(69, 123, 157);</string>
+      </property>
+      <property name="text">
+       <string>Medicines</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icon/side-bar.gif</normaloff>../icon/side-bar.gif</iconset>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

@@ -52,6 +52,7 @@ class CityGraph:
                         subgraph.add_connection(vertex, neighbor, distance)
 
         return subgraph
+
 def shortest_path_to_visit_all2(city_graph, vertices):
     all_paths = permutations(vertices)
     shortest_path = None
@@ -71,6 +72,7 @@ def shortest_path_to_visit_all2(city_graph, vertices):
             shortest_path = path
 
     return shortest_distance, shortest_path
+
 def combine_paths(city_graph, paths):
     combined_path = []
     for i in range(len(paths) - 1):
@@ -98,12 +100,14 @@ def shortest_path_to_visit_all(city_graph, vertices):
 
     combined_shortest_path = combine_paths(city_graph, shortest_path)
     return shortest_distance, combined_shortest_path
+
 def roundTrip(city_graph, vertices):
     shortest_Distance1,shortest_path1=shortest_path_to_visit_all(city_graph, vertices)
     shortest_Distance2,shortest_path2=shortest_path_to_visit_all(city_graph, vertices)
     shortest_Distance1 += shortest_Distance2
     shortest_path1.extend(shortest_path2)
     return shortest_Distance1,shortest_path1
+
 def FindShortestPath(city_graph,start_city,destination_city):
     shortest_distances, shortest_paths = city_graph.dijkstra(start_city)
     distance_to_dest=0.0
@@ -114,6 +118,7 @@ def FindShortestPath(city_graph,start_city,destination_city):
     if path_to_dest == None:
         return None
     return distance_to_dest,path_to_dest
+
 g= CityGraph()
 g.add_city("a")
 g.add_city("b")
