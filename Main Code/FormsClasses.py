@@ -657,8 +657,8 @@ class WindowUserB(QMainWindow):
         data = dfOrders.values.tolist()
         sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
         final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
-        for i in final:
-            print(i)
+        # for i in final:
+        #     print(i)
         product, quantity, price, total, location, date = [], [], [], [], [], []
         for i in final:
             product.append(i[3])

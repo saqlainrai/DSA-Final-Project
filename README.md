@@ -33,11 +33,12 @@ Mr. Nazeef Ul Haq
 ### Instructions to Run the Program
 - Clone the repo from the provided link using this command\
   `git clone https://gitlab.com/dsa-lab/finalproject.git `
-- Open the folder "CS261F23PID24" or run this command \
-  ` cd "CS261F23PID24" `
+- Open the folder "finalproject" or run this command \
+  ` cd "finalproject" `
 - Open the folder "Main Code" or run this command.\
   ` cd "Main Code" `
 - Run the starter.py file.
+- In case, of fluctuations double-click the button.
 - The main screen of the program will be visible on the screen.
 - To Log In as customer, register yourself in the program.
 - To Log In as a admin, use following credentials

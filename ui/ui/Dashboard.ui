@@ -502,7 +502,7 @@ border: 1px solid black;</string>
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>../../../../Downloads/drugstore_4320337.png</pixmap>
+       <pixmap>../../adminIcon.png</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
