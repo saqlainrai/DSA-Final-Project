@@ -1,6 +1,6 @@
 ![image](image.jpg)
 <div align="center">
-  <h2> Pharma Management System </h2>
+  <h2> Pharma Distribution System </h2>
   <h3> DSA Final Project </h3>
 </div>
 
@@ -15,6 +15,19 @@ Mr. Nazeef Ul Haq
 - Saqlain Mansab         (2022-CS-80)
 - Sami Ullah             (2022-CS-82)
 - Malik Muhammad Saad    (2022-CS-94)
+
+
+### Table Of Contents
+- [Course Code](#course-code)
+- [Instructed By](#instructed-by)
+- [Group Members](#group-members)
+- [Table Of Contents](#table-of-contents)
+- [Instructions to Run the Program](#instructions-to-run-the-program)
+- [Features](#features)
+- [Data Structure](#data-structure)
+- [Packages](#packages)
+- [Paths](#paths)
+- [Terms and Conditions](#terms-and-conditions)
 
 ### Instructions to Run the Program
 - Clone the repo from the provided link using this command\
