@@ -53,7 +53,7 @@ class Mainwindow(QMainWindow):
         self.txtPassword.clear()
         flag = self.validate(username, password)
         
-        if username == "Saqlain" and password == "1234":
+        if username == "admin" and password == "1234":
             user = User(username, password, -1)
             user.loginScreen = self
             self.hide()                     # Hide the current window

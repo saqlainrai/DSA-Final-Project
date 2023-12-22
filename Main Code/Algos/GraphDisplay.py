@@ -268,6 +268,13 @@ def findSoleCity(city_graph, vertices, cmp):
                 nearestVertexIndex = i
         return nearestVertexIndex, Shortdistance
 
+def findLinearCost(city_graph, vertices):
+    distance = 0
+    for i in range(len(vertices) - 1):
+        d, _ = FindShortestPath(city_graph, vertices[i], vertices[i + 1])
+        distance += d
+    return distance
+
 def main():
     g = CityGraph()
     g.add_city("a")

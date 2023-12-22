@@ -20,6 +20,6 @@ Parker Thompson,pass234,Philadelphia,ProductR,2,12.99,25.98,31/01/2023
 Quinn Smith,pass890,San Antonio,ProductS,3,8.49,25.47,01/02/2023
 Riley Turner,pass567,Indianapolis,ProductT,1,6.79,6.79,02/02/2023
 a,b,dfd,Product,2,3.23,4.56,02/02/2023
-a,b,Lahore,Panadol,2,6,12,12/12/2023
-tabish,1234,Jallo,xyz,10,5.5,55,22/12/2023
-tabish,1234,Jallo,abc,10,3.5,35,22/12/2023
+a,b,Lahore,Panadol,2,6.0,12.0,12/12/2023
+tabish,1234,Jallo,xyz,10,5.5,55.0,22/12/2023
+tabish,1234,Jallo,abc,10,3.5,35.0,22/12/2023

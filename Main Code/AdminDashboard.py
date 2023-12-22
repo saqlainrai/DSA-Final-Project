@@ -462,19 +462,23 @@ class MainwindowOrders(QMainWindow):
     def deliverPressed(self):
         data = self.currentDataFrame.values.tolist()
         locations = self.currentDataFrame['Location'].tolist()
-        print(locations)
-        print("----------------------------------------------------------")
         setLocations = []
-        for i in locations:
-            if i not in setLocations:
-                setLocations.append(i)
-        print(setLocations)
-        print("----------------------------------------------------------")
-        route, cost = roundTrip(graphCalculate, locations)
-        temp = self.user
-        temp.loginScreen = self
-        self.final = ShowSummary(temp, route, cost)
-        self.final.show()
+        if locations != []:
+            for i in locations:
+                if i not in setLocations:
+                    setLocations.append(i)
+            cost = findLinearCost(graphCalculate, locations)
+            import math
+            cost = math.floor(cost)
+            route = ""
+            for i in setLocations:
+                route += i + " -> "
+            temp = self.user
+            temp.loginScreen = self
+            self.final = ShowSummary(temp, route, cost)
+            self.final.show()
+        else:
+            self.txtComments.setText("There are no orders to deliver!!!")
 
     def searchPressed(self):
         query = self.txtSearch.text()
@@ -596,6 +600,7 @@ class MainwindowOrders(QMainWindow):
             obj.addItem(i)
 
     def displayAOrders(self):
+        dfOrders = pd.read_csv('ordersData.csv')
         self.btnDeliver.setVisible(True)
         self.txtComments.setText("These Orders are pending to be delivered...")
         self.tableViewLoad(dfOrders)
@@ -620,6 +625,7 @@ class MainwindowOrders(QMainWindow):
         self.comboColumns2.setCurrentIndex(0)
 
     def displayDOrders(self):
+        dfPrevious = pd.read_csv('previousOrders.csv')
         self.btnDeliver.setVisible(False)
         self.txtComments.setText("These Orders are dispatched to the customers...")
         self.tableViewLoad(dfPrevious)
@@ -872,7 +878,19 @@ class ShowSummary(QMainWindow):
         self.btnBack.clicked.connect(self.displayPrevious)
 
     def confirm(self):
-        pass
+        dfPrevious = pd.read_csv('previousOrders.csv')
+        dfOrders = pd.read_csv('ordersData.csv')
+        data1 = dfPrevious.values.tolist()
+        data2 = dfOrders.values.tolist()
+        for i in range(len(data2)):
+            data1.append(data2[i])
+        for i in range(len(data2)):
+            data2.pop()
+        dfOrders = pd.DataFrame(data2, columns=dfOrders.columns)
+        dfOrders.to_csv('ordersData.csv', index=False)
+        df = pd.DataFrame(data1, columns=dfPrevious.columns)
+        df.to_csv('previousOrders.csv', index=False)
+        self.displayPrevious()
 
     def displayPrevious(self):
         self.close()

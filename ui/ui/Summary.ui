@@ -199,7 +199,7 @@ border: 0px;</string>
       <rect>
        <x>110</x>
        <y>360</y>
-       <width>301</width>
+       <width>401</width>
        <height>41</height>
       </rect>
      </property>
@@ -218,7 +218,7 @@ background-color: #cdb4db;
 </string>
      </property>
      <property name="text">
-      <string>The travelling cost will be: </string>
+      <string>Linear Total Cost in the Order</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -227,7 +227,7 @@ background-color: #cdb4db;
     <widget class="QSpinBox" name="spinCost">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>530</x>
        <y>360</y>
        <width>231</width>
        <height>41</height>
