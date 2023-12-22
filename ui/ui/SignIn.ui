@@ -53,8 +53,8 @@ background-color: #cdb4db;
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>510</x>
-       <y>140</y>
+       <x>500</x>
+       <y>180</y>
        <width>131</width>
        <height>41</height>
       </rect>
@@ -69,7 +69,9 @@ background-color: #cdb4db;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: #cdb4db;</string>
+      <string notr="true">background-color: #cdb4db;
+border: 0px;
+border-bottom: 2px solid black;</string>
      </property>
      <property name="text">
       <string>Sign In</string>
@@ -79,7 +81,7 @@ background-color: #cdb4db;
      <property name="geometry">
       <rect>
        <x>439</x>
-       <y>220</y>
+       <y>250</y>
        <width>271</width>
        <height>41</height>
       </rect>
@@ -110,7 +112,7 @@ padding-bottom:0px;	</string>
      <property name="geometry">
       <rect>
        <x>439</x>
-       <y>290</y>
+       <y>320</y>
        <width>271</width>
        <height>41</height>
       </rect>
@@ -141,7 +143,7 @@ padding-bottom:0px;	</string>
      <property name="geometry">
       <rect>
        <x>440</x>
-       <y>440</y>
+       <y>470</y>
        <width>261</width>
        <height>41</height>
       </rect>
@@ -200,7 +202,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>440</x>
-       <y>400</y>
+       <y>430</y>
        <width>91</width>
        <height>31</height>
       </rect>
@@ -240,7 +242,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>540</x>
-       <y>400</y>
+       <y>430</y>
        <width>161</width>
        <height>31</height>
       </rect>
@@ -279,7 +281,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>440</x>
-       <y>350</y>
+       <y>380</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -301,6 +303,35 @@ border: 0px;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>60</y>
+       <width>301</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Constantia</family>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0,0,0,0);
+</string>
+     </property>
+     <property name="text">
+      <string>Pharma 
+Distribution System</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>

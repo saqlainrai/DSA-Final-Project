@@ -9,13 +9,7 @@ import csv
 
 from FormsClasses import *
 from AdminDashboard import *
-
-class UserDetails():
-    def __init__(self, name, password, index):
-        self.name = name
-        self.password = password
-        self.index = index
-        self.loginScreen = None
+from classes import *
 
 class Mainwindow(QMainWindow):
     def __init__(self):
@@ -41,11 +35,11 @@ class Mainwindow(QMainWindow):
         # self.btnLogin.clicked.connect(self.login)
 
     def tempScreen(self):
-        user = UserDetails('a', 'b', 4)
+        user = User('a', 'b', 4)
         user.loginScreen = self
         self.hide()                     # Hide the current window
         # Create and show a new window
-        self.new_window = MainwindowDashboard(user)
+        self.new_window = MainWindowUser(user)
         self.new_window.show()
 
     def signUpScreen(self):
@@ -62,7 +56,7 @@ class Mainwindow(QMainWindow):
         flag = self.validate(username, password)
         
         if username == "Saqlain" and password == "1234":
-            user = UserDetails(username, password, -1)
+            user = User(username, password, -1)
             user.loginScreen = self
             self.hide()                     # Hide the current window
             # Create and show a new window
@@ -70,7 +64,7 @@ class Mainwindow(QMainWindow):
             new_window.show()
         else:
             if flag:
-                user = UserDetails(username, password, self.userIndex)
+                user = User(username, password, self.userIndex)
                 user.loginScreen = self
                 self.hide()                     # Hide the current window
                 # Create and show a new window

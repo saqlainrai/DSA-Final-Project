@@ -5,7 +5,7 @@ from collections import deque
 import networkx as nx
 import pandas as pd
 
-path = "point.csv"
+path = "Algos/point.csv"
 # cities = ["UET", "Shahdara", "Ferozewala", "Badshahi Mosque", "Thoker Naiz Baig", "chung", "Maraka", "Valencia", "DHA", "Lidher", "Taij Garh", "Jallo", "Paragon City", "Garhi Shahu", "Allama Iqbal Town", "Johar Town", "TownShip", "Wapda Town", "Kahna"]
 
 class vertex:
@@ -66,7 +66,7 @@ class Graph:
                         stack.append(n)
         return False
 
-    def bfs(self, start_vertex):  # Breadth First Search uses queue to implement
+    def bfs(self, start_vertex, target):  # Breadth First Search uses queue to implement
         for vertex in self._vertices:
             vertex.visited = False
         queue = deque([start_vertex])
@@ -74,13 +74,15 @@ class Graph:
         while queue:
             current_vertex = queue.popleft()
             if not current_vertex.visited:
-                print(current_vertex.data, end=" ")
+                if current_vertex.data == target:
+                    return True
                 current_vertex.visited = True
 
                 # Add unvisited neighbors to the queue
                 for i in current_vertex.adjacent:
                     if not i.visited:
                         queue.append(i)
+        return False
 
     def visualize(self):
         G = nx.Graph()
@@ -119,10 +121,17 @@ class CityGraph:
         if city not in self.graph:
             self.graph[city] = {}
 
+    def find_city(self, city):
+        if city in self.graph:
+            return True
+        return False
+    
     def add_connection(self, city1, city2, distance):
         if city1 in self.graph and city2 in self.graph:
             self.graph[city1][city2] = distance
             self.graph[city2][city1] = distance                # For an undirected connection
+        else:
+            print("Invalid Vertices Ended")
 
     def dijkstra(self, start_city):
         distances = {city: float('inf') for city in self.graph}
@@ -154,6 +163,9 @@ def add_edges(g):
         g.add_edge(i[0], i[1], i[2])
 
 def FindShortestPath(city_graph, start_city, destination_city):
+    if start_city not in city_graph.graph or destination_city not in city_graph.graph:
+        return None, []
+
     shortest_distances, shortest_paths = city_graph.dijkstra(start_city)
     distance_to_dest=0.0
     path_to_dest=[]
@@ -242,10 +254,10 @@ def main():
     #     print(i.data, end=": ")
     # for i in GraphCalculate.graph:
     #     print(i)
-    print(FindShortestPath(GraphCalculate, "Jallo", "TownShip"))
-    graphDisplay.visualize()
-    # result = g.dfs(g.find_vertex("UET"), "Badshahi Mosque")
-    # print(result)
+    # print(FindShortestPath(GraphCalculate, "Jallo", "TownShip"))
+    # graphDisplay.visualize()
+    result = graphDisplay.bfs(graphDisplay.find_vertex("UET"), "Jallo")
+    print(result)
 
 if __name__ == "__main__":
     main()

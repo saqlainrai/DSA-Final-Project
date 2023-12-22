@@ -19,6 +19,9 @@ from Algos.ShellSort import shellSort
 # from algorithms import *
 # from Capital_Algos import *
 
+from classes import *
+from Algos.stack import Stack
+
 medicinePath = "data.csv"
 df = pd.read_csv('customerData.csv')
 dfMedicine = pd.read_csv(medicinePath)
@@ -31,6 +34,8 @@ emails = df['Email'].tolist()
 contacts = df['Contact No.'].tolist()
 locations = df['Location'].tolist()
 key = 11
+
+capital_Stack = Stack()
 
 def Encrypt(message):
     encrypted = ""
@@ -345,12 +350,14 @@ class MainWindowUser(QMainWindow):
     
     def AOrdersPressed(self):
         # self.formB.close()
+        self.user.loginScreen = self
         self.formB = WindowUserB(self.user, 1)
         # self.formB.move(645, 315)
         self.formB.show()
     
     def POrdersPressed(self):
         # self.formB.close()
+        self.user.loginScreen = self
         self.formB = WindowUserB(self.user, 2)
         # self.formB.move(645, 315)
         self.formB.show()
@@ -469,10 +476,11 @@ class MainWindowUser(QMainWindow):
     def settingPressed(self):
         self.greetFrame.hide()
         self.displayDetails()
-        self.tableFrame.setVisible(False)
+        self.tableFrameBoth.setVisible(False)
     
     def displayForm(self):
         # self.hide()
+        self.user.loginScreen = self
         self.new_window = WindowUserB(self)
         self.new_window.move(645, 315)
         self.new_window.show()
@@ -480,7 +488,7 @@ class MainWindowUser(QMainWindow):
     def displayDetails(self):
         self.hide()                     # Hide the current window
         # Create and show a new window
-        new_window = MainwindowDetails(self, self.userIndex)
+        new_window = MainwindowDetails(self, self.user.index)
         new_window.show()
 
     def addToComboBox(self, obj, data):
@@ -489,13 +497,13 @@ class MainWindowUser(QMainWindow):
             obj.addItem(i)
 
     def getCsvHeader(self, file_path):
-        df = pd.read_csv(file_path, nrows=0)  # Read only the first row (header)
+        df = pd.read_csv(file_path, nrows=0)      # Read only the first row (header)
         header = df.columns.tolist()
         return header
 
     def displayLogin(self):
         self.close()
-        self.log.show()
+        self.previousScreen.show()
 
     def tableViewLoad(self, data):
         self.model = QStandardItemModel()
@@ -544,11 +552,51 @@ class WindowUserB(QMainWindow):
         self.btnExit.clicked.connect(self.displayLogin)               
         self.btnHome.clicked.connect(self.displayLogin)
         self.btnStock.clicked.connect(self.displayLogin)
-        self.btnAOrders.clicked.connect(self.AOrdersPressed)
-        self.btnPOrders.clicked.connect(self.POrdersPressed)
         self.btnSetting.clicked.connect(self.displayLogin)
         self.btnSearch.clicked.connect(self.searchPressed)
         self.btnSort.clicked.connect(self.sortPressed)
+
+        self.btnAOrders.clicked.connect(self.AOrdersPressed)
+        self.btnPOrders.clicked.connect(self.POrdersPressed)
+        self.btnRemove.clicked.connect(self.removePressed)
+
+    def removePressed(self):
+        if self.tableView.currentIndex().row() != -1:
+                self.labelComments.setText("Enjoy the best version of Program")
+                index = self.tableView.selectedIndexes()[0].row()
+                capital_Stack.popAtIndex(index)
+                array = self.currentDataFrame.values.tolist()
+                for i in range(index, len(array)):
+                    if i == len(array)-1:
+                        array.pop()
+                        continue
+                    array[i] = array[i+1]
+                
+                df = self.convertToDFOrders(array)
+
+                # df.to_csv('data.csv', index=False)
+                self.currentDataFrame = df
+                self.tableViewLoad(df)
+                self.labelComments.setText("The Data is removed Successfully!!!")
+
+    def convertToDFOrders(self, data):
+        location,product,quantity,price,total,date = [], [], [], [], [], []
+        for i in data:
+            product.append(i[0])
+            quantity.append(i[1])
+            price.append(i[2])
+            total.append(i[3])
+            location.append(i[4])
+            date.append(i[5])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+        return temp
+
 
     def searchPressed(self):
         query = self.txtSearch.text()
@@ -580,6 +628,7 @@ class WindowUserB(QMainWindow):
         data = dfOrders.values.tolist()
         sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
         final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+
         product, quantity, price, total, location, date = [], [], [], [], [], []
         for i in final:
             product.append(i[3])
@@ -608,6 +657,19 @@ class WindowUserB(QMainWindow):
         data = dfPrevious.values.tolist()
         sameUsers = linearSearch(data, str(usernames[self.userIndex]), 0)
         final = linearSearch(sameUsers, str(passes[self.userIndex]), 1) 
+
+        # we are creating a stack of previous orders
+        capital_Stack.clearStack()
+        for i in final:
+            temp = Order(self.user.username, self.user.password, self.user.index)
+            temp.name = i[3]
+            temp.quantity = i[4]
+            temp.price = i[5]
+            temp.total = i[6]
+            temp.location = i[2]
+            temp.date = i[7]
+            capital_Stack.push(temp)
+
         product, quantity, price, total, location, date = [], [], [], [], [], []
         for i in final:
             product.append(i[3])
