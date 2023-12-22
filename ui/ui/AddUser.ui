@@ -328,21 +328,6 @@ padding-bottom:0px;	</string>
        <string>---Select Location---*</string>
       </property>
      </item>
-     <item>
-      <property name="text">
-       <string>Thokhar Niaz Baig</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Town Ship</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Yateem Khana</string>
-      </property>
-     </item>
     </widget>
     <widget class="QLineEdit" name="txtFName">
      <property name="geometry">

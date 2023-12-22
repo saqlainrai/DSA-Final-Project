@@ -83,7 +83,7 @@ border: 1px solid black; /* Sets a black border with a width of 2 pixels */
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_15">
+     <widget class="QPushButton" name="btnSearch">
       <property name="geometry">
        <rect>
         <x>810</x>
@@ -568,7 +568,7 @@ QPushButton:pressed {
        <string>Sort</string>
       </property>
      </widget>
-     <widget class="QLabel" name="labelOrders">
+     <widget class="QLabel" name="txtComments">
       <property name="geometry">
        <rect>
         <x>400</x>
