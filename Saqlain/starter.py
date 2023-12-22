@@ -39,7 +39,7 @@ class Mainwindow(QMainWindow):
         user.loginScreen = self
         self.hide()                     # Hide the current window
         # Create and show a new window
-        self.new_window = MainWindowUser(user)
+        self.new_window = MainwindowDashboard(user)
         self.new_window.show()
 
     def signUpScreen(self):

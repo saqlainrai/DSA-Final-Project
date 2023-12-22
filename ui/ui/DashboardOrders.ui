@@ -142,7 +142,7 @@ border: 2px solid black; /* Sets a black border with a width of 2 pixels */
        </size>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="comboColumns">
       <property name="geometry">
        <rect>
         <x>490</x>
@@ -502,42 +502,10 @@ border: 1px solid black;</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="btnAdd">
-      <property name="geometry">
-       <rect>
-        <x>730</x>
-        <y>540</y>
-        <width>151</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	background-color: #a2d2ff;
-    color: black;
-}
-
-QPushButton:hover {
-	background-color: #bde0fe;
-}
-
-QPushButton:pressed {
-	background-color: #a2d2ff;
-}</string>
-      </property>
-      <property name="text">
-       <string>Add</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="btnRemove">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>550</x>
         <y>540</y>
         <width>151</width>
         <height>41</height>
@@ -570,7 +538,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="btnSort">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>720</x>
         <y>540</y>
         <width>151</width>
         <height>41</height>
@@ -600,7 +568,7 @@ QPushButton:pressed {
        <string>Sort</string>
       </property>
      </widget>
-     <widget class="QLabel" name="labelHeader">
+     <widget class="QLabel" name="labelOrders">
       <property name="geometry">
        <rect>
         <x>400</x>
@@ -624,7 +592,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="btnDeliver">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>330</x>
         <y>540</y>
         <width>201</width>
         <height>41</height>

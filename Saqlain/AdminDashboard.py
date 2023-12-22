@@ -18,8 +18,9 @@ from Algos.ShellSort import shellSort
 from Algos.GraphDisplay import *
 from FormsClasses import *
 
-# from algorithms import *
-# from Capital_Algos import *
+from classes import *
+from Algos.queue import *
+capital_Queue = queue()
 
 medicinePath = "data.csv"
 df = pd.read_csv('customerData.csv')
@@ -71,7 +72,6 @@ class MainwindowDashboard(QMainWindow):
         #-----------------Other buttons------------------------------
         self.btnSearch.clicked.connect(self.searchPressed)
         self.btnSort.clicked.connect(self.sortPressed)
-        self.btnUpdate.clicked.connect(self.updatePressed)
         self.btnRemove.clicked.connect(self.removePressed)
         self.btnAdd.clicked.connect(self.addPressed)
 
@@ -112,9 +112,6 @@ class MainwindowDashboard(QMainWindow):
         else:
             self.txtComments.setText("Select the valid Queries!!!")
 
-    def updatePressed(self):
-        pass
-
     def removePressed(self):
         if self.medicines:
             if self.tableView.currentIndex().row() != -1:
@@ -149,12 +146,21 @@ class MainwindowDashboard(QMainWindow):
                         array.pop()
                         continue
                     array[i] = array[i+1]
+
+                for i in range(len(array)):
+                    array[i][3] = Encrypt(array[i][3])
                 
                 df = self.convertToDFCustomers(array)
 
                 df.to_csv('customerData.csv', index=False)
-                self.currentDataFrame = df
-                self.tableViewLoad(df)
+
+                array = df.values.tolist()
+                for i in range(len(array)):
+                    array[i][3] = Decrypt(array[i][3])
+                
+                new_df = pd.DataFrame(array, columns=df.columns)
+                self.currentDataFrame = new_df
+                self.tableViewLoad(new_df)
                 self.txtComments.setText("The Data is removed Successfully!!!")
             else:
                 self.txtComments.setText("Select a row to remove it!!!")
@@ -428,17 +434,49 @@ class MainwindowOrders(QMainWindow):
         self.btnExit.clicked.connect(self.displayLogin)     
         self.btnHome.clicked.connect(self.displayLogin)
         self.btnCustomers.clicked.connect(self.displayLogin)
+        self.btnMap.clicked.connect(self.displayLogin)
+        
         self.btnAOrders.clicked.connect(self.displayAOrders)
         self.btnDOrders.clicked.connect(self.displayDOrders)
-        self.btnMap.clicked.connect(self.displayLogin)
+    
+    def addToComboBox(self, obj, data):
+        obj.clear()
+        for i in data:
+            obj.addItem(i)
 
     def displayAOrders(self):
         self.labelOrders.setText("These Orders are pending to be delivered...")
         self.tableViewLoad(dfOrders)
+        self.currentDataFrame = dfOrders
+
+        data = dfOrders.values.tolist()
+        capital_Queue.clearQueue()
+        for i in data:
+            temp = Order(i[0], i[1], -1)
+            temp.location = i[2]
+            temp.name = i[3]
+            temp.quantity = i[4]
+            temp.price = i[5]
+            temp.total = i[6]
+            temp.date = i[7]
+            capital_Queue.enqueue(temp)
+
+        header = self.currentDataFrame.columns.tolist()
+        self.addToComboBox(self.comboColumns, header)
+        self.addToComboBox(self.comboColumns2, header)
+        self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
 
     def displayDOrders(self):
         self.labelOrders.setText("These Orders are dispatched to the customers...")
         self.tableViewLoad(dfPrevious)
+        self.currentDataFrame = dfPrevious
+
+        header = self.currentDataFrame.columns.tolist()
+        self.addToComboBox(self.comboColumns, header)
+        self.addToComboBox(self.comboColumns2, header)
+        self.comboColumns.setCurrentIndex(0)
+        self.comboColumns2.setCurrentIndex(0)
     
     def tableViewLoad(self, data):
         self.currentDataFrame = data

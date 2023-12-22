@@ -644,39 +644,6 @@ QPushButton:pressed {
         <string>Add</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="btnUpdate">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>470</y>
-         <width>201</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-    background-color: #66cc66; 
-    color: black;
-}
-
-QPushButton:hover {
-    background-color: #ccffcc; 
-}
-
-QPushButton:pressed {
-    background-color: #99ff99;
-}
-</string>
-       </property>
-       <property name="text">
-        <string>Update</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="txtComments">
        <property name="geometry">
         <rect>
@@ -721,7 +688,7 @@ QPushButton:pressed {
       <widget class="QPushButton" name="btnSort">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>370</x>
          <y>470</y>
          <width>151</width>
          <height>41</height>
