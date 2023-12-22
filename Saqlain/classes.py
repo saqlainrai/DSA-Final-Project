@@ -1,7 +1,7 @@
 
 class User():
     def __init__(self, name, password, index):
-        self.name = name
+        self.username = name
         self.password = password
         self.index = index
         self.loginScreen = None

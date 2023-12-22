@@ -481,7 +481,7 @@ class MainWindowUser(QMainWindow):
     def displayForm(self):
         # self.hide()
         self.user.loginScreen = self
-        self.new_window = WindowUserB(self)
+        self.new_window = WindowUserB(self.user, 1)
         self.new_window.move(645, 315)
         self.new_window.show()
     
@@ -535,6 +535,7 @@ class MainWindowUser(QMainWindow):
 class WindowUserB(QMainWindow):
     def __init__(self, user, caller):
         self.userIndex = 4
+        self.user = user
         self.log = user.loginScreen
         self.currentDataFrame = None
         super(WindowUserB, self).__init__()
