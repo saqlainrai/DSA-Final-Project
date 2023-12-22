@@ -12,9 +12,12 @@ from datetime import datetime
 from Algos.linearSearch import linearSearch
 from Algos.BubleSort import bubble_sort
 from Algos.InsertionSort import insertion_sort
-from Algos.SelectionSort import SelectionSort
 from Algos.ShellSort import shellSort
-
+from Algos.CountingSort import counting_sort
+from Algos.mergeSort import merge_sort
+from Algos.QuickSort import quick_sort
+from Algos.SelectionSort import SelectionSort
+from Algos.BucketSort import bucket_sort
 
 # from algorithms import *
 # from Capital_Algos import *
@@ -449,6 +452,18 @@ class MainWindowUser(QMainWindow):
                 bubble_sort(array, colIndex, criteria)
             elif algo == "Insertion Sort":
                 insertion_sort(array, colIndex, criteria)
+            elif algo == "Selection Sort":
+                SelectionSort(array, colIndex, criteria)
+            elif algo == "Quick Sort":
+                quick_sort(array, 0, len(array)-1, colIndex)
+            elif algo == "Merge Sort":
+                merge_sort(array, 0, len(array)-1, colIndex, criteria)
+            elif algo == "Bucket Sort" or algo == "Counting Sort":
+                if colIndex == 1:
+                    counting_sort(array, colIndex)
+                else:
+                    self.labelComments.setText("Select a valid Column!!!")
+                
             name, price, discount, manufacturer, type, size, cmp1, cmp2 = [], [], [], [], [], [], [], []
             for i in array:
                 name.append(i[0])
@@ -767,6 +782,17 @@ class WindowUserB(QMainWindow):
                 bubble_sort(array, colIndex, criteria)
             elif algo == "Insertion Sort":
                 insertion_sort(array, colIndex, criteria)
+            elif algo == "Selection Sort":
+                SelectionSort(array, colIndex, criteria)
+            elif algo == "Quick Sort":
+                quick_sort(array, 0, len(array)-1, colIndex)
+            elif algo == "Merge Sort":
+                merge_sort(array, 0, len(array)-1, colIndex, criteria)
+            elif algo == "Bucket Sort" or algo == "Counting Sort":
+                if colIndex == 1 or colIndex == 2 or colIndex == 3:
+                    counting_sort(array, colIndex)
+                else:
+                    self.labelComments.setText("Select a valid Column!!!")
             product, quantity, price, total, location, date = [], [], [], [], [], []
             for i in array:
                 product.append(i[0])

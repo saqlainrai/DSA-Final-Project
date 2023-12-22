@@ -596,7 +596,7 @@ background-color: rgb(180, 191, 255);</string>
        </item>
        <item>
         <property name="text">
-         <string>Shell Sort</string>
+         <string>Bucket Sort</string>
         </property>
        </item>
       </widget>
