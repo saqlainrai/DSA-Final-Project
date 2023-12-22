@@ -25,6 +25,8 @@ from Algos.BucketSort import bucket_sort
 from classes import *
 from Algos.stack import Stack
 
+cities = ["UET", "Shahdara", "Ferozewala", "Badshahi Mosque", "Thoker Naiz Baig", "chung", "Maraka", "Valencia", "DHA", "Lidher", "Taij Garh", "Jallo", "Paragon City", "Garhi Shahu", "Allama Iqbal Town", "Johar Town", "TownShip", "Wapda Town", "Kahna"]
+
 medicinePath = "data.csv"
 df = pd.read_csv('customerData.csv')
 dfMedicine = pd.read_csv(medicinePath)
@@ -53,8 +55,9 @@ def Decrypt(message):
     return decrypted
 
 class MainwindowDashboard(QMainWindow):
-    def __init__(self, login_screen):
-        self.log = login_screen
+    def __init__(self, obj):
+        self.user = obj
+        self.log = obj.loginScreen
         super(MainwindowDashboard, self).__init__()
         loadUi("../ui/ui/Dashboard.ui",self)                 # Here we imported the QT Designer file which we made as Python GUI FIle.
         
@@ -120,6 +123,8 @@ class MainwindowSignUp(QMainWindow):
         
         #These 2 lines are used to put funnctions on close and minimize buttons.
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
+
+        self.promptLocations()
         
         self.btnBack.clicked.connect(self.displayLogin)    
         self.btnSignUp.clicked.connect(self.signUp)      
@@ -130,6 +135,10 @@ class MainwindowSignUp(QMainWindow):
         self.comboLocation.currentIndexChanged.connect(lambda: self.resetCombo(self.comboLocation)) 
         # self.btnLogin.clicked.connect(self.login)
     
+    def promptLocations(self):
+        for i in cities:
+            self.comboLocation.addItem(i)
+
     def resetCombo(self, obj):
         obj.setStyleSheet("background-color: #cdb4db;\nborder: 2px solid #555555;\ncolor:rgba(0,0,0,240);")
     def resetStyling(self, obj):
@@ -220,6 +229,8 @@ class MainwindowDetails(QMainWindow):
         #These 2 lines are used to put funnctions on close and minimize buttons.
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
+        self.promptLocations()
+
         usernames = df['Username'].tolist()
         emails = df['Email'].tolist()
         contacts = df['Contact No.'].tolist()
@@ -247,6 +258,10 @@ class MainwindowDetails(QMainWindow):
         self.comboLocation.currentIndexChanged.connect(lambda: self.resetCombo(self.comboLocation)) 
         # self.btnLogin.clicked.connect(self.login)
     
+    def promptLocations(self):
+        for i in cities:
+            self.comboLocation.addItem(i)
+
     def resetCombo(self, obj):
         self.btnUpdate.setEnabled(True)
         obj.setStyleSheet("background-color: #cdb4db;\nborder: 2px solid #555555;\ncolor:rgba(0,0,0,240);")
@@ -352,6 +367,7 @@ class MainWindowUser(QMainWindow):
         # self.btnLogin.clicked.connect(self.login)
     
     def AOrdersPressed(self):
+        self.homePressed()
         # self.formB.close()
         self.user.loginScreen = self
         self.formB = WindowUserB(self.user, 1)
@@ -359,6 +375,7 @@ class MainWindowUser(QMainWindow):
         self.formB.show()
     
     def POrdersPressed(self):
+        self.homePressed()
         # self.formB.close()
         self.user.loginScreen = self
         self.formB = WindowUserB(self.user, 2)

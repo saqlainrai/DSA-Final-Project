@@ -453,14 +453,142 @@ class MainwindowOrders(QMainWindow):
         
         self.btnAOrders.clicked.connect(self.displayAOrders)
         self.btnDOrders.clicked.connect(self.displayDOrders)
+        self.btnSort.clicked.connect(self.sortPressed)
+        self.btnRemove.clicked.connect(self.removePressed)
+        self.btnSearch.clicked.connect(self.searchPressed)
+        self.btnDeliver.clicked.connect(self.deliverPressed)
+
+    def deliverPressed(self):
+        data = self.currentDataFrame.values.tolist()
+        locations = self.currentDataFrame['Location'].tolist()
+        route, cost = roundTrip(graphCalculate, locations)
+        temp = self.user
+        temp.loginScreen = self
+        self.final = ShowSummary(temp, route, cost)
+        self.final.show()
+
+    def searchPressed(self):
+        query = self.txtSearch.text()
+        colIndex = self.comboColumns.currentIndex()
+        if query == "":
+            self.txtComments.setText("Enter a valid query....")
+        else:
+            data = self.currentDataFrame.values.tolist()
+            sameUsers = linearSearch(data, query, colIndex)
+            name, passes, location, product, quantity, price, total, date = [], [], [], [], [], [], [], []
+            for i in sameUsers:
+                name.append(i[0])
+                passes.append(i[1])
+                location.append(i[2])
+                product.append(i[3])
+                quantity.append(i[4])
+                price.append(i[5])
+                total.append(i[6])
+                date.append(i[7])
+            data = {'Name': name,
+                    'Password': passes,
+                    'Location': location,
+                    'Product': product,
+                    'Quantity': quantity,
+                    'Price': price,
+                    'Total Bill': total,
+                    'Date': date}
+            temp = pd.DataFrame(data)
+            self.tableViewLoad(temp)
+            self.currentDataFrame = temp
+
+    def sortPressed(self):
+        criteria = None
+        algo = self.comboAlgos.currentText()
+        colIndex = self.comboColumns2.currentIndex()
+        
+        if self.radioAsc.isChecked() or self.radioDes.isChecked():
+            criteria = self.radioAsc.isChecked()
+        array = self.currentDataFrame.values.tolist()  
+        if algo != "---Select an Algorithm---" and criteria != None:
+            if algo == "Bubble Sort":
+                bubble_sort(array, colIndex, criteria)
+            elif algo == "Insertion Sort":
+                insertion_sort(array, colIndex, criteria)
+            elif algo == "Selection Sort":
+                SelectionSort(array, colIndex, criteria)
+            elif algo == "Quick Sort":
+                quick_sort(array, 0, len(array)-1, colIndex)
+            elif algo == "Merge Sort":
+                merge_sort(array, 0, len(array)-1, colIndex, criteria)
+            elif algo == "Bucket Sort" or algo == "Counting Sort":
+                if colIndex == 1 or colIndex == 2 or colIndex == 3:
+                    counting_sort(array, colIndex)
+                else:
+                    self.txtComments.setText("Select a valid Column!!!")
+            name, passes, location, product, quantity, price, total, date = [], [], [], [], [], [], [], []
+            for i in array:
+                name.append(i[0])
+                passes.append(i[1])
+                location.append(i[2])
+                product.append(i[3])
+                quantity.append(i[4])
+                price.append(i[5])
+                total.append(i[6])
+                date.append(i[7])
+            data = {'Name': name,
+                    'Password': passes,
+                    'Location': location,
+                    'Product': product,
+                    'Quantity': quantity,
+                    'Price': price,
+                    'Total Bill': total,
+                    'Date': date}
+            temp = pd.DataFrame(data)
+            self.tableViewLoad(temp)
+            self.currentDataFrame = temp
+        else:
+            self.txtComments.setText("Select the valid Queries!!!")
+
+    def removePressed(self):
+        if self.tableView.currentIndex().row() != -1:
+                self.txtComments.setText("Enjoy the best version of Program")
+                index = self.tableView.selectedIndexes()[0].row()
+                array = self.currentDataFrame.values.tolist()
+                for i in range(index, len(array)):
+                    if i == len(array)-1:
+                        array.pop()
+                        continue
+                    array[i] = array[i+1]
+                
+                df = self.convertToDFOrders(array)
+
+                # df.to_csv('data.csv', index=False)
+                self.currentDataFrame = df
+                self.tableViewLoad(df)
+                self.txtComments.setText("The Data is removed Successfully!!!")
     
+    def convertToDFOrders(self, data):
+        location,product,quantity,price,total,date = [], [], [], [], [], []
+        for i in data:
+            product.append(i[0])
+            quantity.append(i[1])
+            price.append(i[2])
+            total.append(i[3])
+            location.append(i[4])
+            date.append(i[5])
+        data = {'Product': product,
+                'Quantity': quantity,
+                'Price': price,
+                'Total': total,
+                'Location': location,
+                'Date': date}
+        temp = pd.DataFrame(data)
+        return temp
+
     def addToComboBox(self, obj, data):
         obj.clear()
         for i in data:
             obj.addItem(i)
 
     def displayAOrders(self):
-        self.labelOrders.setText("These Orders are pending to be delivered...")
+        self.btnDeliver.setVisible(True)
+        self.txtComments.setText("These Orders are pending to be delivered...")
         self.tableViewLoad(dfOrders)
         self.currentDataFrame = dfOrders
 
@@ -483,7 +611,8 @@ class MainwindowOrders(QMainWindow):
         self.comboColumns2.setCurrentIndex(0)
 
     def displayDOrders(self):
-        self.labelOrders.setText("These Orders are dispatched to the customers...")
+        self.btnDeliver.setVisible(False)
+        self.txtComments.setText("These Orders are dispatched to the customers...")
         self.tableViewLoad(dfPrevious)
         self.currentDataFrame = dfPrevious
 
@@ -545,6 +674,8 @@ class windowAddUser(QMainWindow):
         #These 2 lines are used to put funnctions on close and minimize buttons.
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
+        self.promptLocations()
+
         self.btnBack.clicked.connect(self.displayLogin)    
         self.btnAdd.clicked.connect(self.add)      
         self.txtUsername.textChanged.connect(lambda: self.resetStyling(self.txtUsername))
@@ -554,6 +685,10 @@ class windowAddUser(QMainWindow):
         self.comboLocation.currentIndexChanged.connect(lambda: self.resetCombo(self.comboLocation)) 
         # self.btnLogin.clicked.connect(self.login)
     
+    def promptLocations(self):
+        for i in cities:
+            self.comboLocation.addItem(i)
+
     def resetCombo(self, obj):
         obj.setStyleSheet("background-color: #cdb4db;\nborder: 2px solid #555555;\ncolor:rgba(0,0,0,240);")
     def resetStyling(self, obj):
@@ -711,3 +846,25 @@ class windowAddMedicine(QMainWindow):
             self.comments.setText("Add valid Username!!!")
             self.txtUsername.setStyleSheet("border: 2px solid red;")
         return False
+
+class ShowSummary(QMainWindow):
+    def __init__(self, obj, route, cost):
+        self.user = obj
+        super(ShowSummary, self).__init__()
+        loadUi("../ui/ui/Summary.ui",self)
+        
+        self.txtContent.setText(route)
+        self.spinCost.setValue(cost)
+
+        # Command to remove the default Windows Frame Design.
+        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        
+        self.btnConfirm.clicked.connect(self.confirm)
+        self.btnBack.clicked.connect(self.displayPrevious)
+
+    def confirm(self):
+        pass
+
+    def displayPrevious(self):
+        self.close()
+        self.user.loginScreen.show()

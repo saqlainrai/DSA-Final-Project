@@ -27,10 +27,8 @@ class Mainwindow(QMainWindow):
         # self.MinimizeButton.clicked.connect(lambda: self.showMinimized())
         
         self.btnExit.clicked.connect(lambda: self.close())                       #add cross(close) button
-        # self.btnSignIn.clicked.connect(self.loginScreen)
-        # self.btnSignUp.clicked.connect(self.signUpScreen)
-
-        self.btnSignIn.clicked.connect(self.tempScreen)
+        self.btnSignIn.clicked.connect(self.loginScreen)
+        self.btnSignUp.clicked.connect(self.signUpScreen)
         
         # self.btnLogin.clicked.connect(self.login)
 
